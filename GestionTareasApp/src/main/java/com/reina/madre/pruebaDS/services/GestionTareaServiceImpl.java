@@ -40,7 +40,6 @@ public class GestionTareaServiceImpl implements IGestionTareaService {
 
 	@Override
 	public List<TareaModel>  listTareaPorPrioridad(int idPrioridad) {
-		List<TareaModel> listTareas = new ArrayList<>();
 		return tareaRepository.findByPrioridadId(idPrioridad);
 	}
 	
