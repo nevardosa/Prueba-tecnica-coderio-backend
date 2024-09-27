@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -45,9 +46,11 @@ public class TareaModel implements Serializable {
 	private String nombre;
 	
 	@Column(name = "prioridad",nullable = false, length = 1)
+	@JoinColumn(name = "id")
 	private int prioridad;
 	
 	@Column(name = "estado",nullable = false, length = 1)
+	@JoinColumn(name = "id")
 	private int estado;
 
 }

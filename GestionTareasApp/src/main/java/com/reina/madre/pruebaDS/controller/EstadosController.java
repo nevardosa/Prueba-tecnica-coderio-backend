@@ -15,16 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.reina.madre.pruebaDS.interfaces.IEstadosService;
 import com.reina.madre.pruebaDS.model.EstadosModel;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @ControllerAdvice
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST })
-//@ApiOperation(value = "Gestión de tareas")
+@Tag(name = "Estados controller", description = "Controller para gestionar estados")
 @RequestMapping("/api/v1/estados")
 public class EstadosController {
 	
 	@Autowired
 	private IEstadosService estadosService;
 	
+	@Operation(summary = "Este controller carga la lista de todas los estados registrados en la base de datos")
 	@GetMapping(path = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<EstadosModel> listarEstados() {
 		List<EstadosModel> listEstados = new ArrayList<>();

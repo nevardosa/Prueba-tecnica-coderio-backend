@@ -2,7 +2,7 @@ package com.reina.madre.pruebaDS.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,20 +30,20 @@ public class GestionTareaServiceImpl implements IGestionTareaService {
 	@Override
 	public void crearTarea(TareaModel tarea) {
 		
-		/*Random random = new Random();
-		int id = 0, min = 0, max = 9999;
-		id = random.nextInt(max - min) + min;
-		*/
-		System.out.println("------------------------ >> "+tarea);
-		//tarea.setIdTarea(id);
 		tareaRepository.save(tarea);
 	}
 
 	@Override
-	public TareaModel consultarTarea(int idTarea) {
-		return tareaRepository.findById(idTarea).orElseThrow();
+	public List<TareaModel>  listTareaPorEstado(int idEstado) {		
+		return tareaRepository.findByEstadoId(idEstado);
 	}
 
+	@Override
+	public List<TareaModel>  listTareaPorPrioridad(int idPrioridad) {
+		List<TareaModel> listTareas = new ArrayList<>();
+		return tareaRepository.findByPrioridadId(idPrioridad);
+	}
+	
 	@Override
 	public TareaModel actualizarTarea(TareaModel tarea) {
 		return tareaRepository.save(tarea);
@@ -57,15 +57,7 @@ public class GestionTareaServiceImpl implements IGestionTareaService {
 	@Override
 	public List<TareaModel> listar() {
 		List<TareaModel> listarTareas = new ArrayList<>();
-		
-		listarTareas = (List<TareaModel>) tareaRepository.findAll();
-		
-	/*	listarTareas = (List<TareaModel>) listarTareas.stream()
-				.filter( t -> t.getPrioridad()
-						.
-			);*/
-		
-		
+		listarTareas = (List<TareaModel>) tareaRepository.findAll();		
 		return (List<TareaModel>) listarTareas;
 	}
 
@@ -81,6 +73,11 @@ public class GestionTareaServiceImpl implements IGestionTareaService {
 		Iterable<PrioridadesModel> listaPrioridades = new ArrayList<>();
 		listaPrioridades = prioridadRepository.findAll();
 		return (List<PrioridadesModel>) listaPrioridades;
+	}
+
+	@Override
+	public TareaModel consultarTareaPorId(int idTarea) {
+		return tareaRepository.findById(idTarea).orElseThrow();	
 	}
 
 }

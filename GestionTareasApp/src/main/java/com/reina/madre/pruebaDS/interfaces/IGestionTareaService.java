@@ -12,7 +12,9 @@ public interface IGestionTareaService {
 	
 	public abstract List<TareaModel> listar();
 	
-	public abstract TareaModel consultarTarea(int idTarea);
+	public abstract List<TareaModel> listTareaPorEstado(int idEstado);
+	
+	public abstract List<TareaModel> listTareaPorPrioridad(int idPrioridad);
 	
 	public abstract TareaModel actualizarTarea(TareaModel tarea);
 	
@@ -21,5 +23,6 @@ public interface IGestionTareaService {
 	public abstract List<EstadosModel> listaEstados();
 	
 	public abstract List<PrioridadesModel> listaPrioridades();
-
+	
+	public abstract TareaModel consultarTareaPorId(int idTarea);
 }

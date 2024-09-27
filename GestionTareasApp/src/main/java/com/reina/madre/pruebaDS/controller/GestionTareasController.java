@@ -22,19 +22,22 @@ import com.reina.madre.pruebaDS.interfaces.IGestionTareaService;
 import com.reina.madre.pruebaDS.model.TareaModel;
 import com.reina.madre.pruebaDS.util.Constantes;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 @RestController
-//@Api(value = "Controlador de Ejemplo")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH,
 		RequestMethod.DELETE })
-//@ApiOperation(value = "Gestión de tareas")
 @RequestMapping("/api/v1/gestiontareas")
+@Tag(name = "Tareas controller", description = "Controller para gestionar tareas")
 public class GestionTareasController {
 
 	@Autowired
 	private IGestionTareaService tareaService;
 	
 	
-	//@ApiOperation(value = "Este metodo permite crear una nueva tarea, recibe como parametro un objeto de tipo TareaModel")
+	@Operation(summary = "Este metodo permite crear una nueva tarea, recibe como parametro un objeto de tipo TareaModel")
 	@PostMapping(path = "/creartarea")
 	public ResponseEntity crearTarea(@RequestBody TareaModel tarea) {
 		try {
@@ -49,7 +52,7 @@ public class GestionTareasController {
 		return ResponseEntity.ok(Constantes.MSG_EXITOSO);
 	}
 
-	//@ApiOperation(value = "Este metodo permite listar todas las tareas creadas en la base de datos")
+	@Operation(summary = "Este metodo permite listar todas las tareas creadas en la base de datos")
 	@GetMapping(path = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<TareaModel> listarTareas() {
 		List<TareaModel> tareaEntityResponse = new ArrayList<>();
@@ -61,13 +64,13 @@ public class GestionTareasController {
 		return tareaEntityResponse;
 	}
 
-	//@ApiOperation(value = "Este metodo consulta una tarea por id, recibe un parametro de tipo int")
-	@GetMapping(path = "/consultar/{idTarea}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity consultar(@PathVariable(value = "idTarea", required = true) Integer idTarea) {
-		TareaModel response = new TareaModel(null, 0, 0);
+	@Operation(summary = "Este metodo consulta tareas por estados, recibe como parametro el id del estado")	
+	@GetMapping(path = "/consultar/estados/{idEstado}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity consultarEstados(@PathVariable(value = "idEstado", required = true) Integer idEstado) {
+		List<TareaModel> response = new ArrayList<>();
 		try {
-			if (idTarea != 0) {
-				response = tareaService.consultarTarea(idTarea);
+			if (idEstado != 0) {
+				response = tareaService.listTareaPorEstado(idEstado);
 			} else {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constantes.MSG_BADREQUEST);
 			}
@@ -77,7 +80,40 @@ public class GestionTareasController {
 		return ResponseEntity.ok(response);
 	}
 
-	//@ApiOperation(value = "Este metodo actualiza una tarea por su id, recibe como parametro un objeto de tipo TareaModel")
+	@Operation(summary = "Este metodo consulta tareas por prioridades, recibe como parametro el id de la prioridad")	
+	@GetMapping(path = "/consultar/prioridades/{idPrioridad}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity consultarPrioridades(@PathVariable(value = "idPrioridad", required = true) Integer idPrioridad) {
+		List<TareaModel> response = new ArrayList<>();
+		try {
+			if (idPrioridad != 0) {
+				response = tareaService.listTareaPorPrioridad(idPrioridad);
+			} else {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constantes.MSG_BADREQUEST);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok(response);
+	}	
+	
+	@Operation(summary = "Este metodo consulta una tarea por su id")	
+	@GetMapping(path = "/consultar/tarea/{idTarea}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity consultarTareaPorId(@PathVariable(value = "idTarea", required = true) Integer idTarea) {
+		TareaModel tareaResponse = new TareaModel();
+		try {
+			if (idTarea != 0) {
+				tareaResponse = tareaService.consultarTareaPorId(idTarea);
+			} else {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Constantes.MSG_BADREQUEST);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok(tareaResponse);
+	}		
+	
+	
+	@Operation(summary = "Este metodo actualiza una tarea por su id, recibe como parametro un objeto de tipo TareaModel")	
 	@PatchMapping(path = "/actualizar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity actualizar(@RequestBody TareaModel tarea) {
 		TareaModel response = new TareaModel();
@@ -93,7 +129,7 @@ public class GestionTareasController {
 		return ResponseEntity.status(HttpStatus.OK).body(Constantes.MSG_EXITOSO);
 	}
 
-	//@ApiOperation(value = "Este metodo elimina una tarea por su id")
+	@Operation(summary = "Este metodo elimina una tarea por su id")
 	@DeleteMapping(path = "/eliminar/{idTarea}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity eliminar(@PathVariable(value = "idTarea", required = true) Integer idTarea) {
 		try {

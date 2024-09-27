@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.reina.madre.pruebaDS.interfaces.IPrioridadesService;
 import com.reina.madre.pruebaDS.model.PrioridadesModel;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET })
-//@ApiOperation(value = "Gestión de tareas")
+@Tag(name = "Prioridades controller", description = "Controller para gestionar prioridades")
 @RequestMapping("/api/v1/prioridades")
 public class PrioridadesController {
 
 	@Autowired
 	private IPrioridadesService prioridadService;
 	
+	@Operation(summary = "Este controller carga la lista de todas las prioridades registradas en la base de datos")
 	@GetMapping(path = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<PrioridadesModel> listaPrioridades() {
 		List<PrioridadesModel> listPrioridades = new ArrayList<>();
